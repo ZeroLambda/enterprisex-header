@@ -1,0 +1,70 @@
+{
+  "logo": {
+    "src": "assets/logo.webp",
+    "alt": "Enterprise Logo"
+  },
+  "brandName": "EnterpriseX",
+  "navigation": [
+    {
+      "name": "Home",
+      "link": "/home"
+    },
+    {
+      "name": "About",
+      "link": "/about",
+      "dropdown": [
+        {
+          "name": "Our Team",
+          "link": "/about/team"
+        },
+        {
+          "name": "Careers",
+          "link": "/about/careers"
+        }
+      ]
+    },
+    {
+      "name": "Services",
+      "link": "/services",
+      "dropdown": [
+        {
+          "name": "Consulting",
+          "link": "/services/consulting"
+        },
+        {
+          "name": "Development",
+          "link": "/services/development"
+        },
+        {
+          "name": "Design",
+          "link": "/services/design"
+        }
+      ]
+    },
+    {
+      "name": "Contact",
+      "link": "/contact"
+    }
+  ],
+  "cta": {
+    "text": "Get Started",
+    "link": "/get-started"
+  },
+  "socialMedia": [
+    {
+      "name": "LinkedIn",
+      "link": "https://linkedin.com/company/enterprisex",
+      "icon": "fa-linkedin"
+    },
+    {
+      "name": "Twitter",
+      "link": "https://twitter.com/enterprisex",
+      "icon": "fa-twitter"
+    },
+    {
+      "name": "Facebook",
+      "link": "https://facebook.com/enterprisex",
+      "icon": "fa-facebook"
+    }
+  ]
+}
