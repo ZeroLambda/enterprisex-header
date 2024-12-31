@@ -90,7 +90,7 @@ body {
   opacity: 0;
   visibility: hidden;
   transform: translateY(10px);
-  transition: all var(--transition-speed) ease-in-out;
+  transition: opacity var(--transition-speed), transform var(--transition-speed);
   min-width: 150px;
   border-radius: 4px;
   overflow: hidden;
@@ -183,21 +183,26 @@ body {
 
 .sidebar .dropdown {
   position: static;
-  transform: none;
+  transform: translateY(0);
   opacity: 1;
   visibility: visible;
   box-shadow: none;
   background: none;
-  height: 0;
-  overflow: hidden;
+  transition: none;
+  margin-left: 0;
 }
 
 .sidebar .dropdown.active {
-  height: auto;
+  opacity: 1;
+  visibility: visible;
 }
 
 .sidebar .dropdown-item {
   padding: 8px 0 8px 20px;
+}
+
+.sidebar .dropdown-item a {
+  font-size: 1rem;
 }
 
 .sidebar .cta-button {

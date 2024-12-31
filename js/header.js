@@ -86,41 +86,41 @@ document.addEventListener("DOMContentLoaded", () => {
     const sidebar = document.createElement("div");
     sidebar.classList.add("sidebar");
     sidebar.innerHTML = `
-            <div class="close-btn"><i class="fas fa-times"></i></div>
-            <ul class="nav-menu">
-                ${data.navigation
-                  .map(
-                    (item) => `
-                    <li class="nav-item">
-                        <a href="${item.link}" class="nav-link">${item.name}</a>
-                        ${
-                          item.dropdown
-                            ? `<ul class="dropdown">
-                            ${item.dropdown
-                              .map(
-                                (sub) =>
-                                  `<li class="dropdown-item"><a href="${sub.link}">${sub.name}</a></li>`
-                              )
-                              .join("")}
-                        </ul>`
-                            : ""
-                        }
-                    </li>
-                `
-                  )
-                  .join("")}
-            </ul>
-            <a href="${data.cta.link}" class="cta-button">${data.cta.text}</a>
-            <div class="social-media">
-                ${data.socialMedia
-                  .map(
-                    (social) => `
-                    <a href="${social.link}" aria-label="${social.name}" target="_blank"><i class="fab ${social.icon}"></i></a>
-                `
-                  )
-                  .join("")}
-            </div>
-        `;
+          <div class="close-btn"><i class="fas fa-times"></i></div>
+          <ul class="nav-menu">
+              ${data.navigation
+                .map(
+                  (item) => `
+                  <li class="nav-item">
+                      <a href="${item.link}" class="nav-link">${item.name}</a>
+                      ${
+                        item.dropdown
+                          ? `<ul class="dropdown">
+                          ${item.dropdown
+                            .map(
+                              (sub) =>
+                                `<li class="dropdown-item"><a href="${sub.link}">${sub.name}</a></li>`
+                            )
+                            .join("")}
+                      </ul>`
+                          : ""
+                      }
+                  </li>
+              `
+                )
+                .join("")}
+          </ul>
+          <a href="${data.cta.link}" class="cta-button">${data.cta.text}</a>
+          <div class="social-media">
+              ${data.socialMedia
+                .map(
+                  (social) => `
+                  <a href="${social.link}" aria-label="${social.name}" target="_blank"><i class="fab ${social.icon}"></i></a>
+              `
+                )
+                .join("")}
+          </div>
+      `;
 
     // Create Overlay
     const overlay = document.createElement("div");
@@ -139,7 +139,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const closeBtn = document.querySelector(".sidebar .close-btn");
     const overlay = document.querySelector(".overlay");
     const navItems = document.querySelectorAll(".nav-item");
-    const isMobile = window.matchMedia("(max-width: 768px)").matches;
 
     // Function to open sidebar
     const openSidebar = () => {
@@ -181,65 +180,70 @@ document.addEventListener("DOMContentLoaded", () => {
       const navLink = item.querySelector(".nav-link");
 
       if (dropdown) {
-        if (isMobile) {
-          // For mobile, toggle dropdown on click
-          navLink.addEventListener("click", (e) => {
+        // Toggle dropdown on click for mobile devices
+        navLink.addEventListener("click", (e) => {
+          // Check if the viewport is mobile
+          if (window.innerWidth <= 768) {
             e.preventDefault();
             const isActive = dropdown.classList.contains("active");
             if (isActive) {
               dropdown.classList.remove("active");
               gsap.to(dropdown, {
                 duration: 0.3,
-                height: 0,
                 opacity: 0,
+                transform: "translateY(10px)",
                 ease: "power2.in",
               });
             } else {
               dropdown.classList.add("active");
               gsap.to(dropdown, {
                 duration: 0.3,
-                height: "auto",
                 opacity: 1,
+                transform: "translateY(0)",
                 ease: "power2.out",
               });
             }
-          });
-        } else {
-          // For desktop, handle hover as before
-          item.addEventListener("mouseenter", () => {
+          }
+        });
+
+        // Hover for desktop devices
+        item.addEventListener("mouseenter", () => {
+          if (window.innerWidth > 768) {
             dropdown.classList.add("active");
             gsap.to(dropdown, {
               duration: 0.3,
               opacity: 1,
-              y: 0,
+              transform: "translateY(0)",
               ease: "power2.out",
             });
-          });
+          }
+        });
 
-          item.addEventListener("mouseleave", () => {
+        item.addEventListener("mouseleave", () => {
+          if (window.innerWidth > 768) {
             dropdown.classList.remove("active");
             gsap.to(dropdown, {
               duration: 0.3,
               opacity: 0,
-              y: 10,
+              transform: "translateY(10px)",
               ease: "power2.in",
             });
-          });
-        }
+          }
+        });
       }
     });
 
-    // Accessibility: Keyboard Navigation remains unchanged
+    // Accessibility: Keyboard Navigation
     document.querySelectorAll(".nav-link").forEach((link) => {
       link.addEventListener("focus", () => {
         const parent = link.parentElement;
         const dropdown = parent.querySelector(".dropdown");
-        if (dropdown) {
+        if (dropdown && window.innerWidth > 768) {
           dropdown.classList.add("active");
           gsap.to(dropdown, {
             duration: 0.3,
             opacity: 1,
-            y: 0,
+            transform: "translateY(0)",
             ease: "power2.out",
           });
         }
@@ -248,25 +252,28 @@ document.addEventListener("DOMContentLoaded", () => {
       link.addEventListener("blur", () => {
         const parent = link.parentElement;
         const dropdown = parent.querySelector(".dropdown");
-        if (dropdown) {
+        if (dropdown && window.innerWidth > 768) {
           dropdown.classList.remove("active");
           gsap.to(dropdown, {
             duration: 0.3,
             opacity: 0,
-            y: 10,
+            transform: "translateY(10px)",
             ease: "power2.in",
           });
         }
       });
     });
 
-    // Listen for window resize to adjust dropdown behavior
+    // Handle window resize without reloading
     window.addEventListener("resize", () => {
-      const isNowMobile = window.matchMedia("(max-width: 768px)").matches;
-      if (isNowMobile !== isMobile) {
-        // Reload the page or re-initialize dropdown behaviors
-        window.location.reload();
+      // Close the sidebar and reset dropdowns on resize to prevent inconsistencies
+      if (window.innerWidth > 768 && sidebar.classList.contains("active")) {
+        closeSidebar();
       }
+      document.querySelectorAll(".dropdown").forEach((dropdown) => {
+        dropdown.classList.remove("active");
+        gsap.set(dropdown, { opacity: 0, transform: "translateY(10px)" });
+      });
     });
   }
 });
